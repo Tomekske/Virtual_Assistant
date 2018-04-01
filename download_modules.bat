@@ -4,3 +4,4 @@ pip install PyAudio
 pip install colorama
 pip install arrow
 pip install nltk
+pip install numpy
