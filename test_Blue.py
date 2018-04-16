@@ -1,11 +1,11 @@
 #===============================================================================#
-#Title           :test_blue														#
-#Description     :Unittest to test virtual assistant code						#
-#Author          :joostenstomek@gmail.com										#
-#Date            :16/04/2018													#
-#Version         :1.0.0															#
-#Usage           :Python														#
-#Python version  :3.6															#
+#Title				:test_blue													#
+#Description		:Unittest to test virtual assistant code					#
+#Author				:joostenstomek@gmail.com									#
+#Date				:16/04/2018													#
+#Version			:1.0.0														#
+#Usage				:Python														#
+#Python version		:3.6														#
 #===============================================================================#
 
 
@@ -19,7 +19,6 @@ import core_functions
 ## @brief      Class for test core functions.
 ##
 class TestCoreFunctions(unittest.TestCase):
-
 	##
 	## @brief     Method to setup basic functionality for code reusability, get called in every test case
 	##
