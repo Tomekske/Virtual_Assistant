@@ -34,7 +34,7 @@ def speech():
 		print("Could not request resulsts from Google Speech Recognition service; {0}".format(e))
 		return "Could not request results from Google Speech Recognition service; {0}".format(e)
 
-w = Weather('tokyo')
+
 
 blue = False
 
@@ -43,11 +43,9 @@ while True:
 
 	if not blue:
 		voice = speech()
-		print(voice)
 		
 		tok, filtered_tok = process_speech(voice)
 		blue = start_command(filtered_tok)
-		print(blue)
 
 	else:
 		print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "Can I do somthing for you ?")
@@ -55,38 +53,53 @@ while True:
 		voice = speech()
 
 		tok, filtered_tok = process_speech(voice)
-
+		print(tok)
 		if define_command(tok,filtered_tok, find_synonyms("time"), ["what","time"]):
 			utc = arrow.utcnow()
 			now = utc.format('HH:mm:ss')
-			print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + now)
+			consoleWrite(Fore.WHITE, now)
+
 
 		elif define_command(tok,filtered_tok, find_synonyms("shut"), ["shut","computer"]):
-			print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "What's the super user's password?")
+			consoleWrite(Fore.WHITE, "What's the super user's password?")
+
 			voice = speech()
 			print(voice)
 			tok, filtered_tok = process_speech(voice)
 
 			if "Amy" in tok:
-				print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "Closing computer!")
+				consoleWrite(Fore.RED, "Closing computer!")			
 				subprocess.call('shutdown -s -t 1')
 			else:
-				print(Fore.YELLOW + 'Blue: ' + Fore.RED + "Password is incorrect!")
+				consoleWrite(Fore.RED, "Password is incorrect!")
+
 
 		elif define_command(tok,filtered_tok, find_synonyms("restart"), ["restart","computer"]):
-			print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "What's the super user's password?")
+			consoleWrite(Fore.WHITE, "What's the super user's password?")
 			voice = speech()
 			print(voice)
 			tok, filtered_tok = process_speech(voice)
 
 			if "Amy" in tok:
-				print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "Restarting computer!")
+				consoleWrite(Fore.WHITE, "Restarting computer!")
 				subprocess.call('shutdown -r -t 1')
 			else:
-				print(Fore.YELLOW + 'Blue: ' + Fore.RED + "Password is incorrect!")
+				consoleWrite(Fore.RED, "Password is incorrect!")
+
 		elif define_command(tok,filtered_tok, find_synonyms("weather"), ["what","weather"]):
-			print('Weather')
+				for l in filtered_tok:
+					w = Weather(l)
+				print(w.location)
+				consoleWrite(Fore.WHITE, str(w.temperature))
+
+		elif define_command(tok,filtered_tok, find_synonyms("exit"), ["exit"]):
+				consoleWrite(Fore.RED, 'Exit')
+				exit(1)
+
+		elif define_command(tok,filtered_tok, find_synonyms("delete"), ["open","delete","file"]):
+				consoleWrite(Fore.WHITE, 'Opening delete content log file')
+				subprocess.call('notepad D:\Log\delete_content.log')
 		else:
-			print(Fore.YELLOW + 'Blue: ' + Fore.RED + "This commmand doesn't exsist!") 
+			consoleWrite(Fore.RED, "This commmand doesn't exsist!")
 
 		blue = False

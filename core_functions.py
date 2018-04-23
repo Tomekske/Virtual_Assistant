@@ -7,6 +7,11 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords, wordnet
 from nltk.stem import WordNetLemmatizer
 from Weather import Weather
+import configparser
+import requests #http request libray
+import json
+from ConfigHandler import Config
+from ResponseHandler import Response
 
 
 
@@ -113,3 +118,8 @@ def define_command(unfiltered, filtered, synonyms, command):
 		return True
 	else:
 		return False
+
+
+
+def consoleWrite(color, text):
+	print(Fore.YELLOW + 'Blue: ' + color + text) 

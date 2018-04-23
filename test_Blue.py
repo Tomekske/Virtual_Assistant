@@ -1,13 +1,12 @@
 #===============================================================================#
-#Title			:test_blue						#
-#Description		:Unit test to test virtual assistant code		#
-#Author			:joostenstomek@gmail.com				#
-#Date			:16/04/2018						#
-#Version		:1.0.0							#
-#Usage			:Python							#
-#Python version		:3.6							#
+#Title           :test_blue                                                     #
+#Description     :Unit test to test virtual assistant code                      #
+#Author          :joostenstomek@gmail.com                                       #
+#Date            :16/04/2018                                                    #
+#Version         :1.0.0                                                         #
+#Usage           :Python                                                        #
+#Python version  :3.6                                                           #
 #===============================================================================#
-
 
 import unittest
 import core_functions
@@ -72,6 +71,17 @@ class TestCoreFunctions(unittest.TestCase):
 		self.assertTrue(core_functions.define_command(self.tokenized, self.filtered, self.synonyms, ['what','time']))
 		self.assertTrue(core_functions.define_command(core_functions.process_speech("what is the weather like in Brussels")[0],core_functions.process_speech("what is the weather like in Brussels")[1], core_functions.find_synonyms('weather'), ['what','weather']))
 	
+
+
+	##
+	## @brief     Method to determintate wether place/country/region is valid or invallid
+	##
+	def test_place(self):
+		self.assertEqual(core_functions.checkPlace(['weather','Merchtem']), 'Merchtem')
+		self.assertEqual(core_functions.checkPlace(['weather','France']), 'France')
+		self.assertEqual(core_functions.checkPlace(['weather','Random_place']), 'ERROR_CITY')
+
+
 
 	##
 	## @brief     Helper method to check if multiple items are in the list
