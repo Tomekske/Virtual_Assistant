@@ -1,10 +1,9 @@
 @echo off
-title a game for youtube 
 SETLOCAL EnableDelayedExpansion
 for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (
   set "DEL=%%a"
 )
-echo say the name of the colors, don't read
+
 call :ColorText 0A "Weather "
 python -W ignore test_Weather.py
 call :ColorText 0A "ConfigHandler "

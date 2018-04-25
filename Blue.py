@@ -8,7 +8,7 @@ from nltk.corpus import stopwords, wordnet
 from nltk.stem import WordNetLemmatizer
 from Weather import Weather
 from core_functions import *
-
+import os
 ##
 ## @brief      Function to start recording speech
 ## @return     Speech as a string
@@ -41,65 +41,85 @@ blue = False
 while True:
 	init(autoreset=True) #reset letter color to default value
 
-	if not blue:
+	voice = speech()
+	
+	tok, filtered_tok = process_speech(voice)
+	blue = start_command(filtered_tok)
+	print(tok)
+
+
+	if define_command(tok,filtered_tok, find_synonyms("time"), ["what","time"]):
+		utc = arrow.utcnow()
+		now = utc.format('HH:mm:ss')
+		consoleWrite(Fore.WHITE, now)
+
+
+	elif define_command(tok,filtered_tok, find_synonyms("restart"), ["restart","computer"]):
+		consoleWrite(Fore.WHITE, "What's the super user's password?")
 		voice = speech()
-		
+		print(voice)
 		tok, filtered_tok = process_speech(voice)
-		blue = start_command(filtered_tok)
+
+		if "Amy" in tok:
+			consoleWrite(Fore.WHITE, "Restarting computer!")
+			subprocess.call('shutdown -r -t 1')
+		else:
+			consoleWrite(Fore.RED, "Password is incorrect!")
+
+
+	elif define_command(tok,filtered_tok, find_synonyms("weather"), ["what","weather"]):
+		for l in filtered_tok:
+			w = Weather(l)
+		print(w.location)
+		consoleWrite(Fore.WHITE, str(w.temperature))
+
+
+	elif define_command(tok,filtered_tok, find_synonyms("exit"), ["exit"]):
+		consoleWrite(Fore.RED, 'Exit')
+		exit(1)
+
+
+	elif define_command(tok,filtered_tok, find_synonyms("delete"), ["open","delete","file"]):
+		consoleWrite(Fore.WHITE, 'Opening delete content log file')
+		subprocess.call('notepad D:\Log\delete_content.log')
+	
+
+	elif define_command(tok,filtered_tok, find_synonyms("program"), ["open","program","folders"]):
+		c = Config('Folders','Programs')
+		consoleWrite(Fore.WHITE, 'Opening program folder')
+		os.system('explorer {0}'.format(c.content))
+
+
+	elif define_command(tok,filtered_tok, find_synonyms("show"), ["open","show","folders"]):
+		c = Config('Folders','Series')
+		consoleWrite(Fore.WHITE, 'Opening serie folder')
+		os.system('explorer {0}'.format(c.content))
+
+	elif define_command(tok,filtered_tok, find_synonyms("movie"), ["open","movie","folders"]):
+		c = Config('Folders','Movies')
+		consoleWrite(Fore.WHITE, 'Opening movie folder')
+		os.system('explorer {0}'.format(c.content))
+
+	elif define_command(tok,filtered_tok, find_synonyms("music"), ["open","music","folders"]):
+		c = Config('Folders','Music')
+		consoleWrite(Fore.WHITE, 'Opening music folder')
+		os.system('explorer {0}'.format(c.content))
+
+	elif define_command(tok,filtered_tok, find_synonyms("picture"), ["open","picture","folders"]):
+		c = Config('Folders','Pictures')
+		consoleWrite(Fore.WHITE, 'Opening picture folder')
+		os.system('explorer {0}'.format(c.content))
+
+	elif define_command(tok,filtered_tok, find_synonyms("game"), ["open","game","folders"]):
+		c = Config('Folders','Games')
+		consoleWrite(Fore.WHITE, 'Opening game folder')
+		os.system('explorer {0}'.format(c.content))
+
+	elif define_command(tok,filtered_tok, find_synonyms("close"), ["close","all","folders"]):
+		consoleWrite(Fore.WHITE, 'All folders are closed')
+		os.system('cmd /c "taskkill /f /im explorer.exe && start explorer"')
 
 	else:
-		print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "Can I do somthing for you ?")
+		consoleWrite(Fore.RED, "This commmand doesn't exsist!")
 
-		voice = speech()
-
-		tok, filtered_tok = process_speech(voice)
-		print(tok)
-		if define_command(tok,filtered_tok, find_synonyms("time"), ["what","time"]):
-			utc = arrow.utcnow()
-			now = utc.format('HH:mm:ss')
-			consoleWrite(Fore.WHITE, now)
-
-
-		elif define_command(tok,filtered_tok, find_synonyms("shut"), ["shut","computer"]):
-			consoleWrite(Fore.WHITE, "What's the super user's password?")
-
-			voice = speech()
-			print(voice)
-			tok, filtered_tok = process_speech(voice)
-
-			if "Amy" in tok:
-				consoleWrite(Fore.RED, "Closing computer!")			
-				subprocess.call('shutdown -s -t 1')
-			else:
-				consoleWrite(Fore.RED, "Password is incorrect!")
-
-
-		elif define_command(tok,filtered_tok, find_synonyms("restart"), ["restart","computer"]):
-			consoleWrite(Fore.WHITE, "What's the super user's password?")
-			voice = speech()
-			print(voice)
-			tok, filtered_tok = process_speech(voice)
-
-			if "Amy" in tok:
-				consoleWrite(Fore.WHITE, "Restarting computer!")
-				subprocess.call('shutdown -r -t 1')
-			else:
-				consoleWrite(Fore.RED, "Password is incorrect!")
-
-		elif define_command(tok,filtered_tok, find_synonyms("weather"), ["what","weather"]):
-				for l in filtered_tok:
-					w = Weather(l)
-				print(w.location)
-				consoleWrite(Fore.WHITE, str(w.temperature))
-
-		elif define_command(tok,filtered_tok, find_synonyms("exit"), ["exit"]):
-				consoleWrite(Fore.RED, 'Exit')
-				exit(1)
-
-		elif define_command(tok,filtered_tok, find_synonyms("delete"), ["open","delete","file"]):
-				consoleWrite(Fore.WHITE, 'Opening delete content log file')
-				subprocess.call('notepad D:\Log\delete_content.log')
-		else:
-			consoleWrite(Fore.RED, "This commmand doesn't exsist!")
-
-		blue = False
+	# 	blue = False

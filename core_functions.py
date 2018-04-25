@@ -1,3 +1,15 @@
+#===============================================================================#
+#Title           :core_functions                                                #
+#Description     :Functions used in blue.py                                     #
+#Author          :joostenstomek@gmail.com                                       #
+#Date            :25/04/2018                                                    #
+#Version         :1.0.0                                                         #
+#Usage           :Python                                                        #
+#Python version  :3.6                                                           #
+#===============================================================================#
+
+
+
 import speech_recognition as sr
 from colorama import Fore, Back, Style, init
 import arrow
@@ -10,8 +22,8 @@ from Weather import Weather
 import configparser
 import requests #http request libray
 import json
-from ConfigHandler import Config
-from ResponseHandler import Response
+import ConfigHandler
+import ResponseHandler
 
 
 
@@ -79,40 +91,49 @@ def process_speech(voice):
 def define_command(unfiltered, filtered, synonyms, command):
 
 	#list of question words
-	question_list = [	"what",
+	exception_list = [	"what",
 						"can",
 						"who", 
 						"where", 
 						"when", 
 						"why", 
-						"which", 
+						"which",
+						"all",
 						"how"]
 	new_Command = []
 	check_commands = []
 	counter = 0
+	blue = False
+
+	#Check if blue is in the speech string
+	if ('blue' in filtered):
+		blue = True
 
 	#loop over command list
-	for c in command:
-		check_commands.append(False) #make sure all elemets in the boolean list are false
+	if blue:
+		for c in command:
+			check_commands.append(False) #make sure all elemets in the boolean list are false
 
-		#if command is in question loop over unfiltered tokens add it to check_commands
-		if c in question_list:
-			for u in unfiltered:
 
-				#Check if unfiltered token is in questionlist and command token is in unfiltered list
-				if (u in question_list) and (c in unfiltered):
-					check_commands[counter] = True #set check_command command postion to true
+			#if command is in question loop over unfiltered tokens add it to check_commands
+			if c in exception_list:
+				for u in unfiltered:
 
-		else:
+					#Check if unfiltered token is in questionlist and command token is in unfiltered list
+					if (u in exception_list) and (c in unfiltered):
+						check_commands[counter] = True #set check_command command postion to true
 
-			#loop over filtered items
-			for f in filtered:
+			else:
 
-				#Check if filtered token is in synonyms and command token is in filtered list
-				if (f in synonyms) and (c in filtered):
-					check_commands[counter] = True #set check_command command postion to true
-		counter += 1 #inrease counter
+				#loop over filtered items
+				for f in filtered:
 
+					#Check if filtered token is in synonyms and command token is in filtered list
+					if (f in synonyms) and (c in filtered):
+						check_commands[counter] = True #set check_command command postion to true
+			counter += 1 #inrease counter
+	else:
+		return False
 		#check if all elements are true in the list
 	if all(check_commands):
 		return True

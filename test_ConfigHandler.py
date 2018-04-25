@@ -1,6 +1,6 @@
 #===============================================================================#
-#Title           :Unit test ResponseHandler                                     #
-#Description     :Unit test to test Response class                              #
+#Title           :Unit test ConfigHandler                                       #
+#Description     :Unit test to test Config class                                #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :20/04/2018                                                    #
 #Version         :1.0.0                                                         #
@@ -28,8 +28,8 @@ class TestConfigHandler(unittest.TestCase):
 		self.file_invalid = 'configfdfsf.ini'
 
 		#Created Conif() objects
-		self.f_valid = Config('Default', 'Default', self.file_valid) #valid object, file name does exsist
-		self.f_invalid = Config('Default', 'Default', self.file_invalid) #invalid object, file name doesn't exsist
+		self.f_valid = Config(self.file_valid) #valid object, file name does exsist
+		self.f_invalid = Config(self.file_invalid) #invalid object, file name doesn't exsist
 
 
 
@@ -52,28 +52,20 @@ class TestConfigHandler(unittest.TestCase):
 
 
 	##
-	## @brief      method to the config file option associated with a section
-	##	
-	def test_option(self):
-		#created invalid objects
-		f_invalid_2 = Config('Default', 'fdsfsdf', self.file_valid)
-		f_invalid_3 = Config('fdgs', 'Default', self.file_invalid)
-		f_invalid_4 = Config('fdgs', 'dfdsf', self.file_invalid)
-
-
-		self.assertTrue(self.f_valid.option) #option exsists
-		self.assertFalse(f_invalid_2.option) #option doesn't exsists
-		self.assertFalse(f_invalid_3.option) #option doesn't exsists
-		self.assertFalse(f_invalid_4.option) #option doesn't exsists
+	## @brief      method to test if the output of the content is valid or invalid
+	##		
+	def test_readContent(self):
+		self.assertEqual(self.f_valid.readData('Default','Default'), 'Test') #Querry is invalid
+		self.assertEqual(self.f_invalid.readData('Default','Defagfult'),'ERROR_DATA') #Querry is invalid
 
 
 
 	##
-	## @brief      method to test if the output of the content is valid or invalid
-	##		
-	def test_readContent(self):
-		self.assertEqual(self.f_valid.content, 'Test') #Querry is invalid
-		self.assertEqual(self.f_invalid.content, 'ERROR_CONTENT') #Querry is invalid
+	## @brief      Method to test if section exsists or not
+	##
+	def test_section(self):
+		self.assertTrue(self.f_valid.checkSection('Default')) #sections exsists
+		self.assertFalse(self.f_valid.checkSection('Deffsdault')) #section does not exsist
 
 
 

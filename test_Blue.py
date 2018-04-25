@@ -21,7 +21,7 @@ class TestCoreFunctions(unittest.TestCase):
 	## @brief     Method to setup basic functionality for code reusability, get called in every test case
 	##
 	def setUp(self):
-		self.speech = "what time is it"
+		self.speech = "blue what time is it"
 		self.tokenized = core_functions.process_speech(self.speech)[0] #String to tokens
 		self.filtered = core_functions.process_speech(self.speech)[1] #Filtered tokens without stopwords
 
@@ -69,17 +69,9 @@ class TestCoreFunctions(unittest.TestCase):
 	##
 	def test_command(self):
 		self.assertTrue(core_functions.define_command(self.tokenized, self.filtered, self.synonyms, ['what','time']))
-		self.assertTrue(core_functions.define_command(core_functions.process_speech("what is the weather like in Brussels")[0],core_functions.process_speech("what is the weather like in Brussels")[1], core_functions.find_synonyms('weather'), ['what','weather']))
-	
+		self.assertTrue(core_functions.define_command(core_functions.process_speech("blue what is the weather like in Brussels")[0],core_functions.process_speech("blue what is the weather like in Brussels")[1], core_functions.find_synonyms('weather'), ['what','weather']))
+		self.assertFalse(core_functions.define_command(core_functions.process_speech("open music folder")[0],core_functions.process_speech("open music folder")[1], core_functions.find_synonyms('weather'), ['what','weather']))
 
-
-	##
-	## @brief     Method to determintate wether place/country/region is valid or invallid
-	##
-	def test_place(self):
-		self.assertEqual(core_functions.checkPlace(['weather','Merchtem']), 'Merchtem')
-		self.assertEqual(core_functions.checkPlace(['weather','France']), 'France')
-		self.assertEqual(core_functions.checkPlace(['weather','Random_place']), 'ERROR_CITY')
 
 
 

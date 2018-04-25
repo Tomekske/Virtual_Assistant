@@ -28,4 +28,3 @@ move ResponseHandler.py ../ResponseHandler.py
 move test_ResponseHandler.py ../test_ResponseHandler.py
 cd ..
 RD /S /Q Module_ResponseHandler
-

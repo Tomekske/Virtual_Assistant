@@ -3,7 +3,7 @@
 #Description     :Class to interface with the openweathermap API                #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :09/04/2018                                                    #
-#Version         :1.0.0                                                         #
+#Version         :1.0.1                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -13,25 +13,25 @@
 import requests #http request libray
 import configparser #parse data from a config file
 import json
-from ResponseHandler import Response
-from ConfigHandler import Config
+import ResponseHandler
+import ConfigHandler
 
 
 ##
 ## @brief      Class to fetch weather data from the openweathermap API
 ##
-class Weather(Config,Response):
+class Weather(ConfigHandler.Config,ResponseHandler.Response):
     ##
     ## @brief      Constructor of the Weather class
     ## @param      location The location or country which you want to fetch weather data from    
     ## @param      file_location The config file location, default value is 'config.ini'    
     ##
     def __init__(self, location, file_location ="config.ini"):
-        Config.__init__(self,'Openweathermap','API', file_location)
-        self.api = self.content
+        ConfigHandler.Config.__init__(self, file_location)
+        self.api = self.readData('Openweathermap','API')
         self.location = location
         self.url = 'http://api.openweathermap.org/data/2.5/weather?q={}&APPID={}&units=metric'.format(location,self.api)
-        Response.__init__(self,self.url)
+        ResponseHandler.Response.__init__(self,self.url)
         self.query = self.json
         self.location_exsists = self.check_city(self.query)
         
