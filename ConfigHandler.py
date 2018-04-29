@@ -3,7 +3,7 @@
 #Description     :Class to interface easily with config files                   #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :24/04/2018                                                    #
-#Version         :1.0.1                                                         #
+#Version         :1.0.2                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -80,18 +80,26 @@ class Config():
 
 
 	##
+	## @brief      Opens a file and checks if section exsist
+	## @param      section  The section of the config file
+	## @param      option   The option of the config file
+	## @return     True or false wether section exsists and a file object
+	##
+	def openFile(self,section, option):
+		return self.checkSection(section), open(self.location,'w')
+
+
+
+	##
 	## @brief      Writes a data to config file
 	## @param      section  The new or exsisting section
 	## @param      option   The option of a section
 	## @param      data     The data you want to write to the file
-	## @return     Boolean wehter 
+	## @return     None
 	##
 	def writeData(self, section, option, data):
-		print(self.file.sections())
-		check = self.checkSection(section)
+		check,save = self.openFile(section,option)
 
-		save = open(self.location,'w')
-		
 		if not check:
 			self.file.add_section(section) #Add section
 			self.file.set(section, option, data) #Add option according to section
@@ -101,3 +109,19 @@ class Config():
 			self.file.set(section, option, data) #Add option according to section
 			self.file.write(save) #Write data to to the [section][option]
 			save.close() #close file
+
+
+
+	##
+	## @brief      Removes an option from the config file
+	## @param      section  The section associated to the option
+	## @param      option   Option you want to delete
+	## @return     None
+	##
+	def removeOption(self, section, option):
+		check,save = self.openFile(section,option)
+		
+		if check:
+			self.file.remove_option(section,option)
+			self.file.write(save) #Write data to to the [section][option]
+		save.close() #close file

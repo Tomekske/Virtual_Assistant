@@ -113,21 +113,15 @@ def define_command(unfiltered, filtered, synonyms, command):
 	if blue:
 		for c in command:
 			check_commands.append(False) #make sure all elemets in the boolean list are false
-
-
 			#if command is in question loop over unfiltered tokens add it to check_commands
 			if c in exception_list:
 				for u in unfiltered:
-
 					#Check if unfiltered token is in questionlist and command token is in unfiltered list
 					if (u in exception_list) and (c in unfiltered):
 						check_commands[counter] = True #set check_command command postion to true
-
 			else:
-
 				#loop over filtered items
 				for f in filtered:
-
 					#Check if filtered token is in synonyms and command token is in filtered list
 					if (f in synonyms) and (c in filtered):
 						check_commands[counter] = True #set check_command command postion to true

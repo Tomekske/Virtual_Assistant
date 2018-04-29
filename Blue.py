@@ -1,3 +1,15 @@
+#===============================================================================#
+#Title           :blue                                                          #
+#Description     :Virtual assitant                                              #
+#Author          :joostenstomek@gmail.com                                       #
+#Date            :29/04/2018                                                    #
+#Version         :1.0.10                                                        #
+#Usage           :Python                                                        #
+#Python version  :3.6                                                           #
+#===============================================================================#
+
+
+
 import speech_recognition as sr
 from colorama import Fore, Back, Style, init
 import arrow
@@ -9,6 +21,10 @@ from nltk.stem import WordNetLemmatizer
 from Weather import Weather
 from core_functions import *
 import os
+import ConfigHandler
+
+
+
 ##
 ## @brief      Function to start recording speech
 ## @return     Speech as a string
@@ -78,16 +94,15 @@ while True:
 		consoleWrite(Fore.RED, 'Exit')
 		exit(1)
 
-
 	elif define_command(tok,filtered_tok, find_synonyms("delete"), ["open","delete","file"]):
 		consoleWrite(Fore.WHITE, 'Opening delete content log file')
 		subprocess.call('notepad D:\Log\delete_content.log')
 	
-
+# OPEN FOLDERS
 	elif define_command(tok,filtered_tok, find_synonyms("program"), ["open","program","folders"]):
-		c = Config('Folders','Programs')
+		c = ConfigHandler.Config()
 		consoleWrite(Fore.WHITE, 'Opening program folder')
-		os.system('explorer {0}'.format(c.content))
+		os.system('explorer {0}'.format(c.readData('Folders','Programs')))
 
 
 	elif define_command(tok,filtered_tok, find_synonyms("show"), ["open","show","folders"]):
@@ -115,11 +130,41 @@ while True:
 		consoleWrite(Fore.WHITE, 'Opening game folder')
 		os.system('explorer {0}'.format(c.content))
 
+# CLOSE FOLDERS
+	elif define_command(tok,filtered_tok, find_synonyms("program"), ["close","program","folders"]):
+		c = ConfigHandler.Config()
+		consoleWrite(Fore.WHITE, 'Closing program folder')
+		os.system('tasklist /V /FI "Programs eq {}'.format(c.readData('Folders','Programs')))
+
+
+	elif define_command(tok,filtered_tok, find_synonyms("show"), ["close","show","folders"]):
+		c = Config('Folders','Series')
+		consoleWrite(Fore.WHITE, 'Closing serie folder')
+		os.system('explorer {0}'.format(c.content))
+
+	elif define_command(tok,filtered_tok, find_synonyms("movie"), ["close","movie","folders"]):
+		c = Config('Folders','Movies')
+		consoleWrite(Fore.WHITE, 'Closing movie folder')
+		os.system('explorer {0}'.format(c.content))
+
+	elif define_command(tok,filtered_tok, find_synonyms("music"), ["close","music","folders"]):
+		c = Config('Folders','Music')
+		consoleWrite(Fore.WHITE, 'Closing music folder')
+		os.system('explorer {0}'.format(c.content))
+
+	elif define_command(tok,filtered_tok, find_synonyms("picture"), ["close","picture","folders"]):
+		c = Config('Folders','Pictures')
+		consoleWrite(Fore.WHITE, 'Closing picture folder')
+		os.system('explorer {0}'.format(c.content))
+
+	elif define_command(tok,filtered_tok, find_synonyms("game"), ["close","game","folders"]):
+		c = Config('Folders','Games')
+		consoleWrite(Fore.WHITE, 'Closing game folder')
+		os.system('explorer {0}'.format(c.content))
+
 	elif define_command(tok,filtered_tok, find_synonyms("close"), ["close","all","folders"]):
 		consoleWrite(Fore.WHITE, 'All folders are closed')
 		os.system('cmd /c "taskkill /f /im explorer.exe && start explorer"')
 
 	else:
 		consoleWrite(Fore.RED, "This commmand doesn't exsist!")
-
-	# 	blue = False
