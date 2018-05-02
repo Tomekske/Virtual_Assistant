@@ -94,7 +94,7 @@ def new_menu(file):
 def old_menu(file):
 	word = input('What word would you like to re-train: ')
 	old = c.readData('Command',word)
-	formated = re.split(r'[,\s]+|,', old) #split on ',' and space
+	formated = re.split(r'[,]+|,', old) #split on ',' and space
 	file.removeOption('Command', word) #remove option from config file
 
 	repeat = input('Repeat: ')
