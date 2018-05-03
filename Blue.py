@@ -3,7 +3,7 @@
 #Description     :Virtual assitant                                              #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :29/04/2018                                                    #
-#Version         :1.0.11                                                        #
+#Version         :1.0.12                                                        #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -22,7 +22,7 @@ from Weather import Weather
 from core_functions import *
 import os
 import ConfigHandler
-
+import sys
 
 
 ##
@@ -50,6 +50,19 @@ def speech():
 		print("Could not request resulsts from Google Speech Recognition service; {0}".format(e))
 		return "Could not request results from Google Speech Recognition service; {0}".format(e)
 
+
+
+argc = len(sys.argv)
+if argc > 1:
+	if sys.argv[1] == '-s':		
+		init(autoreset=True) #reset letter color to default value
+
+		consoleWrite(Fore.YELLOW, 'Installing modules!')
+
+		os.system('call download_modules.bat')
+
+		nltk.download()
+		exit(1)
 
 
 c = ConfigHandler.Config()
