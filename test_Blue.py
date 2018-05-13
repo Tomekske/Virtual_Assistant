@@ -3,7 +3,7 @@
 #Description     :Unit test to test virtual assistant code                      #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :16/04/2018                                                    #
-#Version         :1.0.4                                                         #
+#Version         :1.0.5                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -59,21 +59,22 @@ class TestCoreFunctions(unittest.TestCase):
 	##
 	def test_command(self):
 		#testing regular commands
-		# self.assertTrue(core_functions.define_command(self.tokenized, self.filtered, self.synonyms, ['what','time']))
-		# self.assertTrue(core_functions.define_command(core_functions.process_speech("blue what is the weather in Brussels")[0],core_functions.process_speech("blue what is the weather in Brussels")[1], core_functions.find_synonyms('weather'), ['what','weather']))
-		# self.assertFalse(core_functions.define_command(core_functions.process_speech("blue what tree is it")[0],core_functions.process_speech("blue what tree is it")[1], core_functions.find_synonyms('time'), ['what','time']))
+		self.assertTrue(core_functions.define_command(core_functions.process_speech("blue what time is it")[0], ['what','time']))
+		self.assertTrue(core_functions.define_command(core_functions.process_speech("blue open music folder")[0], ['open','music','folder']))
+		self.assertTrue(core_functions.define_command(core_functions.process_speech("blue reboot computer")[0], ['reboot','computer']))
+
 	
 		# #testing synonyms
-		# self.assertTrue(core_functions.define_command(core_functions.process_speech("blue what clock is it")[0],core_functions.process_speech("blue what clock is it")[1], core_functions.find_synonyms('time'), ['what','time']))
-		# self.assertTrue(core_functions.define_command(core_functions.process_speech("blue WHO is it")[0],core_functions.process_speech("blue WHO is it")[1], core_functions.find_synonyms('who'), ['who']))
-		# self.assertFalse(core_functions.define_command(core_functions.process_speech("blue which is it")[0],core_functions.process_speech("blue which is it")[1], core_functions.find_synonyms('who'), ['who']))
+		self.assertTrue(core_functions.define_command(core_functions.process_speech("blue what clock is it")[0], ['what','time']))
+		self.assertTrue(core_functions.define_command(core_functions.process_speech("blue open music folders")[0], ['open','music','folder']))
+		self.assertTrue(core_functions.define_command(core_functions.process_speech("blue reboot pc")[0], ['reboot','computer']))
 		
 		# #accent
 		# self.assertTrue(core_functions.define_command(core_functions.process_speech("new what time is it")[0],core_functions.process_speech("new what time is it")[1], core_functions.find_synonyms('time'), ['what','time']))
 		# self.assertTrue(core_functions.define_command(core_functions.process_speech("new what's time is it")[0],core_functions.process_speech("new what's time is it")[1],core_functions.find_synonyms('time'), ['what','time']))
 		# self.assertTrue(core_functions.define_command(core_functions.process_speech("blue open music folder")[0],core_functions.process_speech("blue open music folder")[1],core_functions.find_synonyms('music'), ['open','music','folder']))
 		#self.assertTrue(core_functions.define_command(core_functions.process_speech("blue open music folders")[0],core_functions.process_speech("blue open music folders")[1],core_functions.find_synonyms('folder'), ['open','music','folder']))
-		core_functions.define_command(core_functions.process_speech("blue open music folders")[0],core_functions.process_speech("blue open music folders")[1],core_functions.find_synonyms('folder'), ['open','music','folder'])
+		# core_functions.define_command(core_functions.process_speech("blue open music folders")[0],core_functions.process_speech("blue open music folders")[1],core_functions.find_synonyms('folder'), ['open','music','folder'])
 		# self.assertTrue(core_functions.define_command(core_functions.process_speech("blue set passwords")[0],core_functions.process_speech("blue set passwords")[1],core_functions.find_synonyms('set'), ['set','password']))
 		# self.assertTrue(core_functions.define_command(core_functions.process_speech("blue set password")[0],core_functions.process_speech("blue set password")[1],core_functions.find_synonyms('set'), ['set','password']))
 
@@ -81,6 +82,7 @@ class TestCoreFunctions(unittest.TestCase):
 		# self.assertFalse(core_functions.define_command(core_functions.process_speech("fdsf what time is it")[0],core_functions.process_speech("fdsf what time is it")[1], core_functions.find_synonyms('weather'), ['blue','what','time']))
 		# self.assertFalse(core_functions.define_command(core_functions.process_speech("what time is it")[0],core_functions.process_speech("what time is it")[1], core_functions.find_synonyms('weather'), ['what','time']))
 		# self.assertFalse(core_functions.define_command(core_functions.process_speech("new what time is it")[0],core_functions.process_speech("new what time is it")[1], core_functions.find_synonyms('weather'), ['what','time']))
+
 
 
 	##

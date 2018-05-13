@@ -69,74 +69,45 @@ def process_speech(voice):
 
 ##
 ## @brief      Function to define the command sequence
-## @param      unfiltered  Unfiltered token list
-## @param      filtered    Filtered token list
-## @param      synonyms    predefined list of synonyms
+## @param      tokenized  Tokenized speech list
 ## @param      command     The command you want to perform a list
 ## @return     True if all  elements in the list are true, else it'll returns false
 ##
-def define_command(unfiltered, filtered, synonyms, command):
+def define_command(tokenized, command):
 	config = ConfigHandler.Config('trained_speech.ini')
 
-	#list of question words
-	exception_list = [	"what",
-						"can",
-						"who", 
-						"where", 
-						"when", 
-						"why", 
-						"which",
-						"all",
-						"how"]
-	new_Command = []
 	check_commands = []
 	blue = False
-	accent = False
 	counter = 0
-	cc = []
 
-	for f in filtered:
-		if (f in config.readData('Command', 'blue')) or ('blue' in filtered):
+	for t in tokenized:
+		#check if blue is in tokenized or if a token if in accent list
+		if (t in config.readData('Command', 'blue')) or ('blue' in tokenized):
 			blue = True
-
+	#if blue is in command excecute this block of code
 	if blue:
+		#loop over every command in command list
 		for c in command:
 			check_commands.append(False) #make sure all elemets in the boolean list are false
-			#if command is in question loop over unfiltered tokens add it to check_commands
-			accent_string = config.readData('Command', c)
-
+			accent_string = config.readData('Command', c) #get accent string from config file according to command
 			#check if accent is in the file, split string into tokens and store them in a list
 			if accent_string != 'ERROR_DATA':
-				accent_list = re.split(r'[,]+|,', accent_string) #split on ',' and space
-			
-			if c in exception_list:
-				for u in unfiltered:
-					#check if accent isn't in the file, perform the normal command procedure					
-					if accent_string == 'ERROR_DATA':
-						#Check if unfiltered token is in questionlist and command token is in unfiltered list
-						if (c in exception_list) and (u in unfiltered) and (u in synonyms):
-							check_commands[counter] = True #set check_command command postion to true
-					#check if unfiltered word is in the accent list
-					else:
-						if ((c in exception_list) or (u in accent_list)) and ((u in unfiltered) or (u in accent_list)):
-							check_commands[counter] = True #set check_command command postion to true
-
+				accent_list = accent_string.split(',') #split on ',' and space
+				#loop over every token in tokenized list
+				for t in tokenized:
+					#if command = token or if token is in accent list append true
+					if (c == t) or (t in accent_list):
+						check_commands[counter] = True
+			#if accent string is invallid excecute following code
 			else:
-				#loop over filtered items
-				for f in filtered:
-					#check if accent isn't in the file, perform the normal command procedure					
-					if accent_string == 'ERROR_DATA':
-						#Check if filtered token is in synonyms and command token is in filtered list
-						if (f in synonyms) and (f in filtered):
-							check_commands[counter] = True #set check_command command postion to true
-					#check if filtered word is in the accent list
-					else:
-						if ((f in synonyms) or (f in accent_list)) and ((f in filtered) or (f in accent_list)):
-							check_commands[counter] = True #set check_command command postion to true
-
+				#check if command is in tokenized
+				if c in tokenized:
+					check_commands[counter] = True
 			counter += 1 #inrease counter
+	#if blue is not in command then return false
 	else:
 		return False
+
 	#check if all elements are true in the list
 	if all(check_commands):
 		return True

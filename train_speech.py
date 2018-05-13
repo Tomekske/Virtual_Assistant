@@ -3,7 +3,7 @@
 #Description     :train specific words for their pronunciation                  #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :29/04/2018                                                    #
-#Version         :1.0.1                                                         #
+#Version         :1.0.2                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -36,7 +36,7 @@ def speech():
 
 	try:
 		voice = r.recognize_google(audio) #recognize speech
-		return voice
+		return voice.lower()
 	except sr.UnknownValueError:
 		print("Google Speech Recognition could not understand audio")
 		return "Google Speech Recognition could not understand audio"

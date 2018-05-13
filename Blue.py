@@ -3,7 +3,7 @@
 #Description     :Virtual assitant                                              #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :29/04/2018                                                    #
-#Version         :1.0.13                                                        #
+#Version         :1.0.14                                                        #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -42,7 +42,7 @@ def speech():
 
 	try:
 		voice = r.recognize_google(audio) #recognize speech
-		return voice
+		return voice.lower()
 	except sr.UnknownValueError:
 		print("Google Speech Recognition could not understand audio")
 		return "Google Speech Recognition could not understand audio"
@@ -63,7 +63,6 @@ def setPassword():
 	#Repeat conforming password 3 times
 	while counter <= 2:
 		consoleWrite(Fore.WHITE,'{0}. confirm password:'.format(counter + 1))
-		voice = speech()
 		password.append(voice)
 		counter += 1
 
@@ -110,19 +109,27 @@ if argc > 1:
 		nltk.download()
 		exit(1)
 	elif sys.argv[1] == '-t':
-		init(autoreset=True) #reset letter color to default value
-		consoleWrite(Fore.GREEN,'Testing ConfigHandler module')
-		os.system('python -W ignore test_ConfigHandler.py')
+		if argc == 3:
+			if sys.argv[2] == 'blue':
+				init(autoreset=True) #reset letter color to default value
+				consoleWrite(Fore.GREEN,'Testing Blue')
+				os.system('python -W ignore test_Blue.py')
+				exit(1)
+		else:
+			init(autoreset=True) #reset letter color to default value
+			consoleWrite(Fore.GREEN,'Testing ConfigHandler module')
+			os.system('python -W ignore test_ConfigHandler.py')
 
-		consoleWrite(Fore.GREEN,'Testing ResponseHandler module')
-		os.system('python -W ignore test_ResponseHandler.py')
+			consoleWrite(Fore.GREEN,'Testing ResponseHandler module')
+			os.system('python -W ignore test_ResponseHandler.py')
 
-		consoleWrite(Fore.GREEN,'Testing Weather module')
-		os.system('python -W ignore test_Weather.py')
+			consoleWrite(Fore.GREEN,'Testing Weather module')
+			os.system('python -W ignore test_Weather.py')
 
-		consoleWrite(Fore.GREEN,'Testing Blue')
-		os.system('python -W ignore test_Blue.py')
-		exit(1)
+			consoleWrite(Fore.GREEN,'Testing Blue')
+			os.system('python -W ignore test_Blue.py')
+			exit(1)			
+
 	elif sys.argv[1] == '-u':
 		init(autoreset=True) #reset letter color to default value
 		consoleWrite(Fore.YELLOW, 'Updating modules!')
@@ -137,17 +144,18 @@ if argc > 1:
 while True:
 	init(autoreset=True) #reset letter color to default value
 	voice = speech()
-	tok, filtered_tok = process_speech(voice)
 
-	print('Tokenized:', tok)
+	tokenized, filtered_tok = process_speech(voice)
+
+	print('Tokenized:', tokenized)
 	print('filtered_tok:', filtered_tok)
 
-	if define_command(tok,filtered_tok, find_synonyms("time"), ["what","time"]):
+	if define_command(tokenized, ["what","time"]):
 		utc = arrow.utcnow()
 		now = utc.format('HH:mm:ss')
 		consoleWrite(Fore.WHITE, now)
 
-	elif define_command(tok,filtered_tok, find_synonyms("password"), ["set","password"]):
+	elif define_command(tokenized, ["set","password"]):
 		option = c.checkOption('Password', 'user')
 
 		#check if there is a password
@@ -164,7 +172,7 @@ while True:
 			else:
 				consoleWrite(Fore.RED,"Old password is incorrect try again!")
 
-	elif define_command(tok,filtered_tok, find_synonyms("close"), ["close","computer"]):
+	elif define_command(tokenized, ["close","computer"]):
 		print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "What's the super user's password?")
 		voice = speech()
 
@@ -174,7 +182,7 @@ while True:
 		else:
 			print(Fore.YELLOW + 'Blue: ' + Fore.RED + "Password is incorrect!")
 
-	elif define_command(tok,filtered_tok, find_synonyms("restart"), ["restart","computer"]):
+	elif define_command(tokenized, ["restart","computer"]):
 		consoleWrite(Fore.WHITE, "What's the super user's password?")
 		voice = speech()
 
@@ -184,45 +192,45 @@ while True:
 		else:
 			consoleWrite(Fore.RED, "Password is incorrect!")
 
-	elif define_command(tok,filtered_tok, find_synonyms("weather"), ["what","weather"]):
+	elif define_command(tokenized, ["what","weather"]):
 		for l in filtered_tok:
 			w = Weather(l)
 		print(w.location)
 		consoleWrite(Fore.WHITE, str(w.temperature))
 
-	elif define_command(tok,filtered_tok, find_synonyms("exit"), ["exit"]):
+	elif define_command(tokenized, ["exit"]):
 		consoleWrite(Fore.RED, 'Exit')
 		exit(1)
 
-	elif define_command(tok,filtered_tok, find_synonyms("delete"), ["open","delete","file"]):
+	elif define_command(tokenized, ["open","delete","file"]):
 		consoleWrite(Fore.WHITE, 'Opening delete content log file')
 		subprocess.call('notepad D:\Log\delete_content.log')
 	
-	elif define_command(tok,filtered_tok, find_synonyms("program"), ["open","program","folder"]):
+	elif define_command(tokenized, ["open","program","folder"]):
 		consoleWrite(Fore.WHITE, 'Opening program folder')
 		os.system('explorer {0}'.format(c.readData('Folders','Programs')))
 
-	elif define_command(tok,filtered_tok, find_synonyms("show"), ["open","show","folder"]):
+	elif define_command(tokenized, ["open","show","folder"]):
 		consoleWrite(Fore.WHITE, 'Opening serie folder')
 		os.system('explorer {0}'.format(c.readData('Folders','Series')))
 
-	elif define_command(tok,filtered_tok, find_synonyms("movie"), ["open","movie","folder"]):
+	elif define_command(tokenized, ["open","movie","folder"]):
 		consoleWrite(Fore.WHITE, 'Opening movie folder')
 		os.system('explorer {0}'.format(c.readData('Folders','Movies')))
 
-	elif define_command(tok,filtered_tok, find_synonyms("music"), ["open","music","folder"]):
+	elif define_command(tokenized, ["open","music","folder"]):
 		consoleWrite(Fore.WHITE, 'Opening music folder')
 		os.system('explorer {0}'.format(c.readData('Folders','Music')))
 
-	elif define_command(tok,filtered_tok, find_synonyms("picture"), ["open","picture","folder"]):
+	elif define_command(tokenized, ["open","picture","folder"]):
 		consoleWrite(Fore.WHITE, 'Opening picture folder')
 		os.system('explorer {0}'.format(c.readData('Folders','Pictures')))
 
-	elif define_command(tok,filtered_tok, find_synonyms("game"), ["open","game","folder"]):
+	elif define_command(tokenized, ["open","game","folder"]):
 		consoleWrite(Fore.WHITE, 'Opening game folder')
 		os.system('explorer {0}'.format(c.readData('Folders','Games')))
 
-	elif define_command(tok,filtered_tok, find_synonyms("close"), ["close","all","folders"]):
+	elif define_command(tokenized, ["close","all","folders"]):
 		consoleWrite(Fore.WHITE, 'All folders are closed')
 		os.system('cmd /c "taskkill /f /im explorer.exe && start explorer"')
 
