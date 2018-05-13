@@ -64,6 +64,12 @@ pip install httplib2
 echo.
 echo.
 
+call :ColorText 0A "Installing Curses-menu"
+echo.
+pip install curses-menu
+echo.
+echo.
+
 call :ColorText 0A "Installing Module_Weather"
 echo.
 git clone https://github.com/Tomekske/Module_Weather

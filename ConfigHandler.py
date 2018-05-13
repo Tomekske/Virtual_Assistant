@@ -3,7 +3,7 @@
 #Description     :Class to interface easily with config files                   #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :24/04/2018                                                    #
-#Version         :1.0.2                                                         #
+#Version         :1.0.4                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -80,6 +80,17 @@ class Config():
 
 
 	##
+	## @brief      Method to check wether a option exsists or not
+	## @param      section  The section that is linked to the option
+	## @param      option  The option you want to test
+	## @return     Return boolean 
+	##
+	def checkOption(self, section, option):
+		return self.file.has_option(section, option)
+
+
+
+	##
 	## @brief      Opens a file and checks if section exsist
 	## @param      section  The section of the config file
 	## @param      option   The option of the config file
@@ -125,3 +136,19 @@ class Config():
 			self.file.remove_option(section,option)
 			self.file.write(save) #Write data to to the [section][option]
 		save.close() #close file
+
+
+
+	##
+	## @brief      Get all options from a given section
+	## @param      section  The section you want to get all options from
+	## @return     List with all the options
+	##
+	def getOptions(self, section):
+		options = []
+
+		if self.checkSection(section):
+			for c in self.file[section]:
+				options.append(c)
+			return options
+		return options

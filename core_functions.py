@@ -3,7 +3,7 @@
 #Description     :Functions used in blue.py                                     #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :25/04/2018                                                    #
-#Version         :1.0.1                                                         #
+#Version         :1.0.2                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -25,6 +25,7 @@ import json
 import ConfigHandler
 import ResponseHandler
 import re
+import hashlib
 
 
 ##
@@ -113,11 +114,11 @@ def define_command(unfiltered, filtered, synonyms, command):
 					#check if accent isn't in the file, perform the normal command procedure					
 					if accent_string == 'ERROR_DATA':
 						#Check if unfiltered token is in questionlist and command token is in unfiltered list
-						if (u in exception_list) and (c in unfiltered):
+						if (c in exception_list) and (u in unfiltered) and (u in synonyms):
 							check_commands[counter] = True #set check_command command postion to true
 					#check if unfiltered word is in the accent list
 					else:
-						if ((u in exception_list) or (u in accent_list)) and ((c in unfiltered) or (u in accent_list)):
+						if ((c in exception_list) or (u in accent_list)) and ((u in unfiltered) or (u in accent_list)):
 							check_commands[counter] = True #set check_command command postion to true
 
 			else:
@@ -126,17 +127,16 @@ def define_command(unfiltered, filtered, synonyms, command):
 					#check if accent isn't in the file, perform the normal command procedure					
 					if accent_string == 'ERROR_DATA':
 						#Check if filtered token is in synonyms and command token is in filtered list
-						if (f in synonyms) and (c in filtered):
+						if (f in synonyms) and (f in filtered):
 							check_commands[counter] = True #set check_command command postion to true
 					#check if filtered word is in the accent list
 					else:
-						if ((f in synonyms) or (f in accent_list)) and ((c in filtered) or (f in accent_list)):
+						if ((f in synonyms) or (f in accent_list)) and ((f in filtered) or (f in accent_list)):
 							check_commands[counter] = True #set check_command command postion to true
 
 			counter += 1 #inrease counter
 	else:
 		return False
-
 	#check if all elements are true in the list
 	if all(check_commands):
 		return True
@@ -152,4 +152,16 @@ def define_command(unfiltered, filtered, synonyms, command):
 ## @return     { description_of_the_return_value }
 ##
 def consoleWrite(color, text):
-	print(Fore.YELLOW + 'Blue: ' + color + text) 
+	print(Fore.YELLOW + 'Blue: ' + color + text)
+
+
+
+##
+## @brief      Function to simplify hashing function (sha224)
+## @param      word  The word you want to hash
+## @return     Return hashed word
+##
+def sha224(word):
+	return hashlib.sha224(str.encode(word)).hexdigest()
+
+

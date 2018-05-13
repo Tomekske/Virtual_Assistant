@@ -3,7 +3,7 @@
 #Description     :Virtual assitant                                              #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :29/04/2018                                                    #
-#Version         :1.0.12                                                        #
+#Version         :1.0.13                                                        #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -23,7 +23,7 @@ from core_functions import *
 import os
 import ConfigHandler
 import sys
-
+import hashlib
 
 ##
 ## @brief      Function to start recording speech
@@ -52,42 +52,133 @@ def speech():
 
 
 
-argc = len(sys.argv)
+##
+## @brief      Sets the password for the superuser's commands
+## @return     None
+##
+def setPassword():
+	counter = 0
+	password = []
+
+	#Repeat conforming password 3 times
+	while counter <= 2:
+		consoleWrite(Fore.WHITE,'{0}. confirm password:'.format(counter + 1))
+		voice = speech()
+		password.append(voice)
+		counter += 1
+
+	#Check if all 3 samples are the same
+	if password[0] == password[1] == password[2]:
+		c.writeData('Password','User',sha224(password[0])) #write hashed password to config file	
+		consoleWrite(Fore.GREEN,"Password's succesfully set!")
+	else:
+		consoleWrite(Fore.RED,"Passwords don't match, please try again!")	
+
+
+
+##
+## @brief      Function that check if password is correct
+## @param      password  The spoken password
+## @return     True or False dependin wether password is correct or not
+##
+def checkPassword(password):
+	c = ConfigHandler.Config()
+
+	if sha224(password) == c.readData('Password','user'):
+		return True
+	else:
+		return False
+
+
+
+#===============================================================================#
+#                                                                               #
+#                              Main program                                     #
+#                                                                               #
+#===============================================================================#
+
+
+
+argc = len(sys.argv) #check for commandline argumens
+c = ConfigHandler.Config() #Congif object
+
 if argc > 1:
-	if sys.argv[1] == '-s':		
+	if sys.argv[1] == '-c':		
 		init(autoreset=True) #reset letter color to default value
-
 		consoleWrite(Fore.YELLOW, 'Installing modules!')
-
 		os.system('call download_modules.bat')
-
 		nltk.download()
+		exit(1)
+	elif sys.argv[1] == '-t':
+		init(autoreset=True) #reset letter color to default value
+		consoleWrite(Fore.GREEN,'Testing ConfigHandler module')
+		os.system('python -W ignore test_ConfigHandler.py')
+
+		consoleWrite(Fore.GREEN,'Testing ResponseHandler module')
+		os.system('python -W ignore test_ResponseHandler.py')
+
+		consoleWrite(Fore.GREEN,'Testing Weather module')
+		os.system('python -W ignore test_Weather.py')
+
+		consoleWrite(Fore.GREEN,'Testing Blue')
+		os.system('python -W ignore test_Blue.py')
+		exit(1)
+	elif sys.argv[1] == '-u':
+		init(autoreset=True) #reset letter color to default value
+		consoleWrite(Fore.YELLOW, 'Updating modules!')
+		os.system('call download_modules.bat')
+		exit(1)
+	elif sys.argv[1] == '-l':
+		os.system('python train_speech.py')
 		exit(1)
 
 
-c = ConfigHandler.Config()
+
 while True:
 	init(autoreset=True) #reset letter color to default value
-
 	voice = speech()
-	
 	tok, filtered_tok = process_speech(voice)
+
 	print('Tokenized:', tok)
 	print('filtered_tok:', filtered_tok)
-
 
 	if define_command(tok,filtered_tok, find_synonyms("time"), ["what","time"]):
 		utc = arrow.utcnow()
 		now = utc.format('HH:mm:ss')
 		consoleWrite(Fore.WHITE, now)
 
+	elif define_command(tok,filtered_tok, find_synonyms("password"), ["set","password"]):
+		option = c.checkOption('Password', 'user')
+
+		#check if there is a password
+		if not option:
+			setPassword() #create new password
+		else: #Change old password
+			consoleWrite(Fore.WHITE,'Please enter old password')
+			voice = speech()
+			tok, filtered_tok = process_speech(voice)
+
+			if checkPassword(filtered_tok[0]):
+				consoleWrite(Fore.WHITE,'Please enter new password')
+				setPassword()
+			else:
+				consoleWrite(Fore.RED,"Old password is incorrect try again!")
+
+	elif define_command(tok,filtered_tok, find_synonyms("close"), ["close","computer"]):
+		print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "What's the super user's password?")
+		voice = speech()
+
+		if checkPassword(voice):
+			print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "Closing computer!")
+			subprocess.call('shutdown -s -t 1')
+		else:
+			print(Fore.YELLOW + 'Blue: ' + Fore.RED + "Password is incorrect!")
+
 	elif define_command(tok,filtered_tok, find_synonyms("restart"), ["restart","computer"]):
 		consoleWrite(Fore.WHITE, "What's the super user's password?")
 		voice = speech()
-		print(voice)
-		tok, filtered_tok = process_speech(voice)
 
-		if "Amy" in tok:
+		if checkPassword(voice):
 			consoleWrite(Fore.WHITE, "Restarting computer!")
 			subprocess.call('shutdown -r -t 1')
 		else:
@@ -111,7 +202,6 @@ while True:
 		consoleWrite(Fore.WHITE, 'Opening program folder')
 		os.system('explorer {0}'.format(c.readData('Folders','Programs')))
 
-
 	elif define_command(tok,filtered_tok, find_synonyms("show"), ["open","show","folder"]):
 		consoleWrite(Fore.WHITE, 'Opening serie folder')
 		os.system('explorer {0}'.format(c.readData('Folders','Series')))
@@ -131,6 +221,10 @@ while True:
 	elif define_command(tok,filtered_tok, find_synonyms("game"), ["open","game","folder"]):
 		consoleWrite(Fore.WHITE, 'Opening game folder')
 		os.system('explorer {0}'.format(c.readData('Folders','Games')))
+
+	elif define_command(tok,filtered_tok, find_synonyms("close"), ["close","all","folders"]):
+		consoleWrite(Fore.WHITE, 'All folders are closed')
+		os.system('cmd /c "taskkill /f /im explorer.exe && start explorer"')
 
 	else:
 		consoleWrite(Fore.RED, "This commmand doesn't exsist!")
