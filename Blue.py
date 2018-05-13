@@ -33,6 +33,7 @@ def speech():
 	r = sr.Recognizer() #make an object
 	r.energy_threshold = 4000
 	r.pause_threshold = 0.8
+
 	#use microphone as source
 	with sr.Microphone() as source:
 		r.adjust_for_ambient_noise(source, duration = 1)
@@ -63,6 +64,7 @@ def setPassword():
 	#Repeat conforming password 3 times
 	while counter <= 2:
 		consoleWrite(Fore.WHITE,'{0}. confirm password:'.format(counter + 1))
+		voice = speech()
 		password.append(voice)
 		counter += 1
 
@@ -166,11 +168,20 @@ while True:
 			voice = speech()
 			tok, filtered_tok = process_speech(voice)
 
-			if checkPassword(filtered_tok[0]):
+			if checkPassword(voice):
 				consoleWrite(Fore.WHITE,'Please enter new password')
 				setPassword()
 			else:
 				consoleWrite(Fore.RED,"Old password is incorrect try again!")
+   
+	elif define_command(tokenized,['test','password']):
+		consoleWrite(Fore.WHITE,'Please say password')
+		voice = speech()
+
+		if checkPassword(voice):
+			consoleWrite(Fore.GREEN,'Password is correct')
+		else:
+			consoleWrite(Fore.RED,'Password is incorrect')
 
 	elif define_command(tokenized, ["close","computer"]):
 		print(Fore.YELLOW + 'Blue: ' + Fore.WHITE + "What's the super user's password?")
