@@ -3,7 +3,7 @@
 #Description     :Functions used in blue.py                                     #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :25/04/2018                                                    #
-#Version         :1.0.2                                                         #
+#Version         :1.0.3                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -26,6 +26,9 @@ import ConfigHandler
 import ResponseHandler
 import re
 import hashlib
+import os
+from speech_functions import *
+
 
 
 ##
@@ -126,7 +129,6 @@ def consoleWrite(color, text):
 	print(Fore.YELLOW + 'Blue: ' + color + text)
 
 
-
 ##
 ## @brief      Function to simplify hashing function (sha224)
 ## @param      word  The word you want to hash
@@ -136,3 +138,21 @@ def sha224(word):
 	return hashlib.sha224(str.encode(word)).hexdigest()
 
 
+
+##
+## @brief      To open folders in windows explorer
+## @param      tokenized  The tokenized speech
+## @return     None
+##
+def folders(tokenized):
+	c = ConfigHandler.Config()
+
+	for t in tokenized:
+		directory = c.readData('Folders',t) #check if option exists
+		path = os.path.isdir(directory) #check if directory exists
+
+		#if directory exists open the folder
+		if directory != 'ERROR_DATA' and path:
+			consoleWrite(Fore.WHITE, 'Opening {0} folder'.format(t.lower()))
+			os.system('explorer {0}'.format(directory)) #Open folder in windows explorer 
+			sound('Sounds/beep_ok.mp3')

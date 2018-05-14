@@ -64,9 +64,21 @@ pip install httplib2
 echo.
 echo.
 
-call :ColorText 0A "Installing Curses-menu"
+call :ColorText 0A "Installing pyglet"
 echo.
-pip install curses-menu
+pip install pyglet
+echo.
+echo.
+
+call :ColorText 0A "Installing pyglet"
+echo.
+pip install pyglet
+echo.
+echo.
+
+call :ColorText 0A "Installing gtts"
+echo.
+pip install gtts
 echo.
 echo.
 
@@ -103,7 +115,6 @@ RD /S /Q Module_ResponseHandler
 echo.
 echo.
 
-PAUSE
 goto :Beginoffile
 
 :ColorText
@@ -114,4 +125,3 @@ del "%~2" > nul 2>&1
 goto :eof
 
 :Beginoffile
-

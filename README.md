@@ -10,7 +10,7 @@
 # Setting up
 ### 1. Download modules
 	python blue.py -c
-### 2. If downloading is finnished press any key to continue
+### 2. Install the AVbin-10-win64.exe in the browser
 ### 3. Download all collections
 ### 4. When finnished exit the window
 
@@ -25,7 +25,7 @@
 
 # Optionally: train words so recognizion will better understand your accent
 ### Run the following command
-	python blue.py -u
+	python blue.py -l
 ### Option 1: Train a new word
 #### 1. Enter the word you want to train
 #### 2. Enter the amount of times you want to repeat the word
@@ -33,6 +33,10 @@
 ### Option 2: Train an exsisting word
 #### 1. Enter the word you want to re-train
 #### 2. Enter the amount of times you want to repeat the word
+
+### Option 3: Synonyms
+#### 1. Enter new synonym
+#### 2. Add synonym to exsisting word
 
 
 # Updating modules
