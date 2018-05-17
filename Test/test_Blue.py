@@ -11,8 +11,7 @@
 
 
 import unittest
-import core_functions
-
+import Modules.core_functions as core_functions
 
 
 ##
@@ -30,9 +29,9 @@ class TestCoreFunctions(unittest.TestCase):
 
 
 
-	##
-	## @brief     Method to test if speech is correctly converted to tokenized and filtered
-	##
+	#
+	# @brief     Method to test if speech is correctly converted to tokenized and filtered
+	#
 	def test_processSpeech(self):		
 		#Tokenized
 		self.checkItemsInList(['what','time','it'], self.tokenized)

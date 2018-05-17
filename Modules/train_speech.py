@@ -3,7 +3,7 @@
 #Description     :train specific words for their pronunciation                  #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :29/04/2018                                                    #
-#Version         :1.0.2                                                         #
+#Version         :1.0.3                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -11,7 +11,7 @@
 
 
 import ConfigHandler
-import core_functions as cf
+import Modules.core_functions as cf
 import speech_recognition as sr
 from colorama import Fore, Back, Style, init
 import re
@@ -302,7 +302,7 @@ def drawLine(start,symbol,stop,amount):
 
 
 init(autoreset=True) #reset letter color to default value
-c = ConfigHandler.Config('trained_speech.ini')
+c = ConfigHandler.Config('Config/trained_speech.ini')
 mainMenu = namedtuple('mainMenu', ['index','point','description'])
 main_menu = []
 

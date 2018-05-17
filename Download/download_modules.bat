@@ -16,12 +16,6 @@ pip install SpeechRecognition
 echo.
 echo.
 
-call :ColorText 0A "Installing configparser"
-echo.
-pip install configparser
-echo.
-echo.
-
 call :ColorText 0A "Installing PyAudio"
 echo.
 pip install PyAudio
@@ -70,51 +64,11 @@ pip install pyglet
 echo.
 echo.
 
-call :ColorText 0A "Installing pyglet"
-echo.
-pip install pyglet
-echo.
-echo.
-
 call :ColorText 0A "Installing gtts"
 echo.
 pip install gtts
 echo.
 echo.
-
-call :ColorText 0A "Installing Module_Weather"
-echo.
-git clone https://github.com/Tomekske/Module_Weather
-cd Module_Weather
-move Weather.py ../Weather.py
-move test_Weather.py ../test_Weather.py
-cd ..
-RD /S /Q Module_Weather
-echo.
-echo.
-
-call :ColorText 0A "Installing Module_ConfigHandler"
-echo.
-git clone https://github.com/Tomekske/Module_ConfigHandler
-cd Module_ConfigHandler
-move ConfigHandler.py ../ConfigHandler.py
-move test_ConfigHandler.py ../test_ConfigHandler.py
-cd ..
-RD /S /Q Module_ConfigHandler
-echo.
-echo.
-
-call :ColorText 0A "Installing Module_ResponseHandler"
-echo.
-git clone https://github.com/Tomekske/Module_ResponseHandler
-cd Module_ResponseHandler
-move ResponseHandler.py ../ResponseHandler.py
-move test_ResponseHandler.py ../test_ResponseHandler.py
-cd ..
-RD /S /Q Module_ResponseHandler
-echo.
-echo.
-
 goto :Beginoffile
 
 :ColorText

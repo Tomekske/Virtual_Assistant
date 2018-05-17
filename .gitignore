@@ -1,2 +1,6 @@
 *.pyc
-config.ini
+*.gitattributes
+__pycache__
+build
+dist
+Virtual_assistant.egg-info

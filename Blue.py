@@ -3,43 +3,39 @@
 #Description     :Virtual assitant                                              #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :29/04/2018                                                    #
-#Version         :1.0.15                                                        #
+#Version         :1.0.17                                                        #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
 
 
 
+import sys,os,time,subprocess,hashlib
 import speech_recognition as sr
 from colorama import Fore, Back, Style, init
 import arrow
-import subprocess
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize 
 from nltk.corpus import stopwords, wordnet
 from nltk.stem import WordNetLemmatizer
-from Weather import Weather
-from core_functions import *
-import os
-import ConfigHandler
-import sys
-import hashlib
 from gtts import gTTS
 import pyglet
-import time
-from speech_functions import *
-
+from Modules.speech_functions import *
+from Modules.core_functions import *
+from Weather import Weather 
+import ConfigHandler
 
 
 argc = len(sys.argv) #check for commandline argumens
-c = ConfigHandler.Config() #Congif object
+c = ConfigHandler.Config('Config/config.ini') #Congif object
 
 if argc > 1:
 	if sys.argv[1] == '-c':		
 		init(autoreset=True) #reset letter color to default value
-		consoleWrite(Fore.YELLOW, 'Installing modules!')
-		os.system('call download_modules.bat')
+		consoleWrite(Fore.GREEN, 'Downloading AVbin10-win64')
 		os.system('explorer.exe https://github.com/downloads/AVbin/AVbin/AVbin10-win64.exe')
+		consoleWrite(Fore.GREEN, 'Downloading GIT for commandline')
+		os.system('explorer.exe https://git-scm.com/download/win')
 		nltk.download()
 		exit(1)
 	elif sys.argv[1] == '-t':
@@ -47,32 +43,34 @@ if argc > 1:
 			if sys.argv[2] == 'blue':
 				init(autoreset=True) #reset letter color to default value
 				consoleWrite(Fore.GREEN,'Testing Blue')
-				os.system('python -W ignore test_Blue.py')
+				os.system('python -W ignore Test/test_ConfigHandler.py')
 				exit(1)
 		else:
 			init(autoreset=True) #reset letter color to default value
 			consoleWrite(Fore.GREEN,'Testing ConfigHandler module')
-			os.system('python -W ignore test_ConfigHandler.py')
+			os.system('python -W ignore Test/test_ConfigHandler.py')
 
 			consoleWrite(Fore.GREEN,'Testing ResponseHandler module')
-			os.system('python -W ignore test_ResponseHandler.py')
+			os.system('python -W ignore Test/test_ResponseHandler.py')
 
 			consoleWrite(Fore.GREEN,'Testing Weather module')
-			os.system('python -W ignore test_Weather.py')
+			os.system('python -W ignore Test/test_Weather.py')
 
 			consoleWrite(Fore.GREEN,'Testing Blue')
-			os.system('python -W ignore test_Blue.py')
+			os.system('python -W ignore Test/test_Blue.py')
 			exit(1)			
 
 	elif sys.argv[1] == '-u':
 		init(autoreset=True) #reset letter color to default value
 		consoleWrite(Fore.YELLOW, 'Updating modules!')
-		os.system('call download_modules.bat')
+		os.system('call Download/download_modules_GIT.bat')
 		exit(1)
 	elif sys.argv[1] == '-l':
-		os.system('python train_speech.py')
+		os.system('python Modules/train_speech.py')
 		exit(1)
-
+	elif sys.argv[1] == '-d':
+		os.system('python setup.py install')
+	
 
 
 while True:
@@ -147,7 +145,7 @@ while True:
 
 	elif define_command(tokenized, ["what","weather"]):
 		for l in filtered_tok:
-			w = Weather(l)
+			w = Weather(l,'Config/config.ini')
 		text = 'The temperature in {0} is {1} degrees'.format(w.location,round(w.temperature))
 		consoleWrite(Fore.WHITE, text)
 		tts(text)

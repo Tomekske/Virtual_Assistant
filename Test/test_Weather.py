@@ -23,8 +23,8 @@ class TestWeather(unittest.TestCase):
 	## @brief      setUp function to set up two weather objects
 	##
 	def setUp(self):
-		self.weather_valid = Weather('Brussels') #valid object
-		self.weather_invalid = Weather('Brussegfdgls') #Invalid object
+		self.weather_valid = Weather('Brussels','Config/config.ini') #valid object
+		self.weather_invalid = Weather('Brussegfdgls','Config/config.ini') #Invalid object
 
 
 

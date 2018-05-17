@@ -3,7 +3,7 @@
 #Description     :Functions used in blue.py                                     #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :25/04/2018                                                    #
-#Version         :1.0.3                                                         #
+#Version         :1.0.4                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -27,8 +27,7 @@ import ResponseHandler
 import re
 import hashlib
 import os
-from speech_functions import *
-
+import Modules.speech_functions
 
 
 ##
@@ -77,8 +76,7 @@ def process_speech(voice):
 ## @return     True if all  elements in the list are true, else it'll returns false
 ##
 def define_command(tokenized, command):
-	config = ConfigHandler.Config('trained_speech.ini')
-
+	config = ConfigHandler.Config('Config/trained_speech.ini')
 	check_commands = []
 	blue = False
 	counter = 0
@@ -129,6 +127,7 @@ def consoleWrite(color, text):
 	print(Fore.YELLOW + 'Blue: ' + color + text)
 
 
+
 ##
 ## @brief      Function to simplify hashing function (sha224)
 ## @param      word  The word you want to hash
@@ -145,7 +144,7 @@ def sha224(word):
 ## @return     None
 ##
 def folders(tokenized):
-	c = ConfigHandler.Config()
+	c = ConfigHandler.Config('Config/config.ini')
 
 	for t in tokenized:
 		directory = c.readData('Folders',t) #check if option exists
@@ -155,4 +154,4 @@ def folders(tokenized):
 		if directory != 'ERROR_DATA' and path:
 			consoleWrite(Fore.WHITE, 'Opening {0} folder'.format(t.lower()))
 			os.system('explorer {0}'.format(directory)) #Open folder in windows explorer 
-			sound('Sounds/beep_ok.mp3')
+			Modules.speech_functions.sound('Sounds/beep_ok.mp3')

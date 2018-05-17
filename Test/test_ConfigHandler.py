@@ -24,7 +24,7 @@ class TestConfigHandler(unittest.TestCase):
 	##	
 	def setUp(self):
 		#Variables with config file names
-		self.file_valid = 'config.ini'
+		self.file_valid = 'Config/config.ini'
 		self.file_invalid = 'configfdfsf.ini'
 
 		#Created Conif() objects

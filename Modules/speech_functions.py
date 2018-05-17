@@ -3,7 +3,7 @@
 #Description     :Functions used for speech                                     #
 #Author          :joostenstomek@gmail.com                                       #
 #Date            :14/05/2018                                                    #
-#Version         :1.0.0                                                         #
+#Version         :1.0.1                                                         #
 #Usage           :Python                                                        #
 #Python version  :3.6                                                           #
 #===============================================================================#
@@ -18,16 +18,15 @@ import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize 
 from nltk.corpus import stopwords, wordnet
 from nltk.stem import WordNetLemmatizer
-from Weather import Weather
-from core_functions import *
 import os
-import ConfigHandler
 import sys
 import hashlib
 from gtts import gTTS
 import pyglet
 import time
-from speech_functions import *
+from Weather import Weather
+import ConfigHandler
+from Modules.core_functions import *
 
 
 
@@ -43,7 +42,6 @@ def speech():
 	#use microphone as source
 	with sr.Microphone() as source:
 		r.adjust_for_ambient_noise(source, duration = 1)
-
 		print(Fore.YELLOW + "Say something:")
 		audio = r.listen(source) #record speech
 
