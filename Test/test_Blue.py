@@ -11,7 +11,7 @@
 
 
 import unittest
-import Modules.core_functions as core_functions
+from Modules.Core import core_functions
 
 
 ##

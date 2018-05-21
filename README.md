@@ -5,22 +5,22 @@
 	Joostens Tomek
 ### Description
 	Voice controlled virtual assistant
+### Version
+	1.0.18
 
-
-# Setting up
-### 1. Download modules
+# Setup
+### 1. Setup
+	python setup.py install
+### 2. Configure
 	python blue.py -c
-### 2. Install the AVbin-10-win64.exe in the browser
-### 3. Download all collections
-### 4. When finnished exit the window
+### 3. Install the AVbin-10-win64.exe in the browser
+### 4. Install github if necessary
+### 5. Download all NLTK collections
+### 6. When finnished exit the window
 
 
-# Test if everything works fine #
-### Option 1: Enter the following command in commandline
+# Test
 	python blue.py -t
-### Option 2: Enter the following command in commandline
-	test_blue.bat
-### Option 3: Dubbel click on the test_blue.bat script
 
 
 # Optionally: train words so recognizion will better understand your accent
@@ -41,7 +41,6 @@
 
 # Updating modules
 	python blue.py -u
-
 
 # Config file
 ### Change the absolute path for the next folders Serie, Music, Pictures and Movie supported

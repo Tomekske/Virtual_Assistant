@@ -11,7 +11,7 @@
 
 
 import unittest
-from ResponseHandler import Response
+from Modules.ResponseHandler.ResponseHandler import Response
 
 
 

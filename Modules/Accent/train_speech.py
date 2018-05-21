@@ -10,39 +10,13 @@
 
 
 
-import ConfigHandler
-import Modules.core_functions as cf
+from Modules.ConfigHandler import ConfigHandler
+from Modules.Core import speech_functions
+import Modules.Core.core_functions as cf
 import speech_recognition as sr
 from colorama import Fore, Back, Style, init
 import re
 from collections import namedtuple
-
-
-
-##
-## @brief      Function to start recording speech
-## @return     Speech as a string
-##
-def speech():
-	r = sr.Recognizer() #make an object
-	r.energy_threshold = 4000
-	r.pause_threshold = 0.8
-	#use microphone as source
-	with sr.Microphone() as source:
-		r.adjust_for_ambient_noise(source, duration = 1)
-
-		print(Fore.YELLOW + "Say something:")
-		audio = r.listen(source) #record speech
-
-	try:
-		voice = r.recognize_google(audio) #recognize speech
-		return voice.lower()
-	except sr.UnknownValueError:
-		print("Google Speech Recognition could not understand audio")
-		return "Google Speech Recognition could not understand audio"
-	except sr.RequestError as e:
-		print("Could not request resulsts from Google Speech Recognition service; {0}".format(e))
-		return "Could not request results from Google Speech Recognition service; {0}".format(e)
 
 
 
@@ -110,7 +84,7 @@ def new_menu(file):
 	#Repeat loop x-times
 	while counter <= (int(repeat) - 1):
 		print('Round:', counter + 1)
-		ns = speech()
+		ns = speech_functions.speech()
 		print('You said:', ns)
 		words.append(ns) #append word to a list
 		counter += 1
@@ -134,12 +108,8 @@ def old_menu(file):
 	print('# Commands already registered #')
 	drawLine('#','-','#',29)
 
-
-
 	oldMenu = namedtuple('oldMenu', ['hash1','number','point','word','hash2'])
 	old_menu = []
-
-
 
 	for o in options:
 		old_menu.append(oldMenu('#',counter+1,'.',o, '#'))
@@ -171,7 +141,7 @@ def old_menu(file):
 	#Repeat loop x-times	
 	while counter <= (int(repeat) - 1):
 		print('Round:', counter + 1)
-		ns = speech()
+		ns = speech_functions.speech()
 		print('You said:', ns)
 		formated.append(ns)
 		counter += 1

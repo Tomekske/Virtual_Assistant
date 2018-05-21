@@ -8,7 +8,7 @@ call :ColorText 0A "Installing Module_Weather"
 echo.
 git clone https://github.com/Tomekske/Module_Weather
 cd Module_Weather
-move Weather.py ../Modules/Weather.py
+move Weather.py ../Modules/Weather/Weather.py
 move test_Weather.py ../Test/test_Weather.py
 cd ..
 RD /S /Q Module_Weather
@@ -19,7 +19,7 @@ call :ColorText 0A "Installing Module_ConfigHandler"
 echo.
 git clone https://github.com/Tomekske/Module_ConfigHandler
 cd Module_ConfigHandler
-move ConfigHandler.py ../Modules/ConfigHandler.py
+move ConfigHandler.py ../Modules/ConfigHandler/ConfigHandler.py
 move test_ConfigHandler.py ../Test/test_ConfigHandler.py
 cd ..
 RD /S /Q Module_ConfigHandler
@@ -30,7 +30,7 @@ call :ColorText 0A "Installing Module_ResponseHandler"
 echo.
 git clone https://github.com/Tomekske/Module_ResponseHandler
 cd Module_ResponseHandler
-move ResponseHandler.py ../Modules/ResponseHandler.py
+move ResponseHandler.py ../Modules/ResponseHandler/ResponseHandler.py
 move test_ResponseHandler.py ../Test/test_ResponseHandler.py
 cd ..
 RD /S /Q Module_ResponseHandler

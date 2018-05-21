@@ -13,21 +13,16 @@
 import speech_recognition as sr
 from colorama import Fore, Back, Style, init
 import arrow
-import subprocess
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize 
 from nltk.corpus import stopwords, wordnet
 from nltk.stem import WordNetLemmatizer
-from Weather import Weather
 import configparser
 import requests #http request libray
-import json
-import ConfigHandler
-import ResponseHandler
-import re
-import hashlib
-import os
-import Modules.speech_functions
+import Modules.ResponseHandler.ResponseHandler as ResponseHandler
+import Modules.ConfigHandler.ConfigHandler as ConfigHandler
+import re,hashlib,os,json,subprocess
+from Modules.Core import speech_functions
 
 
 ##
@@ -154,4 +149,4 @@ def folders(tokenized):
 		if directory != 'ERROR_DATA' and path:
 			consoleWrite(Fore.WHITE, 'Opening {0} folder'.format(t.lower()))
 			os.system('explorer {0}'.format(directory)) #Open folder in windows explorer 
-			Modules.speech_functions.sound('Sounds/beep_ok.mp3')
+			speech_functions.speech_functions.sound('Sounds/beep_ok.mp3')

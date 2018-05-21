@@ -11,7 +11,7 @@
 
 
 import unittest
-from ConfigHandler import Config
+from Modules.ConfigHandler import ConfigHandler
 
 
 
@@ -28,8 +28,8 @@ class TestConfigHandler(unittest.TestCase):
 		self.file_invalid = 'configfdfsf.ini'
 
 		#Created Conif() objects
-		self.f_valid = Config(self.file_valid) #valid object, file name does exsist
-		self.f_invalid = Config(self.file_invalid) #invalid object, file name doesn't exsist
+		self.f_valid = ConfigHandler.Config(self.file_valid) #valid object, file name does exsist
+		self.f_invalid = ConfigHandler.Config(self.file_invalid) #invalid object, file name doesn't exsist
 
 
 

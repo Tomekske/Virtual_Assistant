@@ -12,22 +12,10 @@
 
 import speech_recognition as sr
 from colorama import Fore, Back, Style, init
-import arrow
-import subprocess
-import nltk
-from nltk.tokenize import sent_tokenize, word_tokenize 
-from nltk.corpus import stopwords, wordnet
-from nltk.stem import WordNetLemmatizer
-import os
-import sys
-import hashlib
 from gtts import gTTS
-import pyglet
-import time
-from Weather import Weather
-import ConfigHandler
-from Modules.core_functions import *
-
+import hashlib,os,json,subprocess,sys,time,pyglet
+import Modules.ConfigHandler.ConfigHandler as ConfigHandler
+from Modules.Core import core_functions
 
 
 ##
@@ -65,21 +53,21 @@ def speech():
 def setPassword():
 	counter = 0
 	password = []
-
+	c = ConfigHandler.Config()
 	#Repeat conforming password 3 times
 	while counter <= 2:
-		consoleWrite(Fore.WHITE,'{0}. confirm password:'.format(counter + 1))
+		core_functions.consoleWrite(Fore.WHITE,'{0}. confirm password:'.format(counter + 1))
 		voice = speech()
 		password.append(voice)
 		counter += 1
 
 	#Check if all 3 samples are the same
 	if password[0] == password[1] == password[2]:
-		c.writeData('Password','User',sha224(password[0])) #write hashed password to config file	
-		consoleWrite(Fore.GREEN,"Password's succesfully set!")
+		c.writeData('Password','User',core_functions.sha224(password[0])) #write hashed password to config file	
+		core_functions.consoleWrite(Fore.GREEN,"Password's succesfully set!")
 		sound('Sounds/beep_ok.mp3')
 	else:
-		consoleWrite(Fore.RED,"Passwords don't match, please try again!")	
+		core_functions.consoleWrite(Fore.RED,"Passwords don't match, please try again!")	
 		sound('Sounds/beep_error.mp3')
 
 
@@ -92,7 +80,7 @@ def setPassword():
 def checkPassword(password):
 	c = ConfigHandler.Config()
 
-	if sha224(password) == c.readData('Password','user'):
+	if core_functions.sha224(password) == c.readData('Password','user'):
 		sound('Sounds/beep_ok.mp3')
 		return True
 	else:
@@ -114,7 +102,7 @@ def sound(sound):
 		music.play()
 		time.sleep(music.duration)
 	else:
-		consoleWrite(Fore.RED,"Mediafile not found!")	
+		core_functions.consoleWrite(Fore.RED,"Mediafile not found!")	
 
 
 
